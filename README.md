@@ -20,3 +20,5 @@ where
 + max iter: maximum iteration
 + optimiser: [sgd, adam, rmsprop, nadam, adadelta, adagrad]
 + objective func: objective functions (xen: cross-entropy, llh: (negative) log-likelihood)
+
+If there is a problem running the code please contact: sontn.fz@gmail.com or sn.tran@utas.edu.au
