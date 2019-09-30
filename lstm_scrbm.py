@@ -222,9 +222,8 @@ class LSTM_SCRBM(object):
                     c+=1
                 else:
                     epoch +=1
-                    print("%d sample trained"%c)
+                    #print("%d sample trained"%c)
                     c=0                    
-                    
                     # Evaluate on evaluation set
                     vld_nllh, vld_acc, vld_f1 = evaluate(self,session,self.dataset,nllh,pred)
                     if self.conf.eval_metric=="nllh":# Negative Log-likelihood
@@ -246,7 +245,7 @@ class LSTM_SCRBM(object):
                         if self.conf.opt=="sgd":
                             lr = lr/(1+self.conf.LR_DECAY_VAL)
 
-                    print("[Epoch %d] err:%.5f aac:%.5f nllh:%.5f f1:%.5f (%s):%f %d"  % (epoch,total_err,vld_acc,vld_nllh,vld_f1,self.conf.eval_metric,max_vld_val,per_dec_count))
+                    #print("[Epoch %d] err:%.5f aac:%.5f nllh:%.5f f1:%.5f (%s):%f %d"  % (epoch,total_err,vld_acc,vld_nllh,vld_f1,self.conf.eval_metric,max_vld_val,per_dec_count))
                     total_err = 0
                     
                     save_process(self.ckp_name,[lr,epoch,max_vld_val,max_epoch,per_dec_count])

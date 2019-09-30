@@ -12,12 +12,12 @@ Prerequisites:
 
 Run code:
 
-python orc_example.py <cell> <learning rate> <max iter> <optimiser> <objective func>
+python orc_example.py <cell> <learning rate> <hidden units> <optimiser> <objective func>
 
 where
-+ cell: [RNN, GRU, LSTM, AE, AESoft, AELSTM, DRBM, RDRBM,LSTMDRBM,LSTMDRBMSoft]
++ cell: [BasicRNN, GRU, LSTM, AE, AESoft, AELSTM, DRBM, RDRBM,LSTMDRBM,LSTMDRBMSoft]
 + learning rate
-+ max iter: maximum iteration
++ hidden units: number of hidden units
 + optimiser: [sgd, adam, rmsprop, nadam, adadelta, adagrad]
 + objective func: objective functions (xen: cross-entropy, llh: (negative) log-likelihood)
 

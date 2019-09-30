@@ -5,12 +5,12 @@ import os
 import sys
 import numpy as np
 
-from data.ocr import OCR
+from ocr import OCR
 from lstm_scrbm import LSTM_SCRBM
 
 HOME = os.path.expanduser("~")
 
-EXP_DIR = '.'
+EXP_DIR = './ckpt'
 DAT_DIR = '.'
 FOLD_NUM = 10
 
@@ -75,7 +75,7 @@ def run(hidNum,lr):
         conf.gate_use  = gate     # For LSTM-DRBM only
         
     if conf.cell_type=="BasicRNN":
-        self.activation = activation
+        conf.activation = activation
 
     if "AE" in conf.cell_type:
         conf.f = f_act
@@ -86,7 +86,7 @@ def run(hidNum,lr):
 
     result_dir = (EXP_DIR                  
                   + "/"  + conf.opt
-                  + "/"  + conf.cell_type + conf.gate_use + conf.activation+ conf.f + conf.g
+                  + "_"  + conf.cell_type  + "_"  + conf.gate_use  + "_"+ conf.activation  + "_" + conf.f  + "_" + conf.g
                   + "_"+ conf.obj_func +  "_h" + str(conf.hidNum)
                   + "_b" + str(conf.batch_size) +"_"+str(lr))
 
@@ -97,22 +97,22 @@ def run(hidNum,lr):
     if os.path.isfile(result_log):
         print("exist file "+ result_log)
         return
-        ∑
+    
     acc = []
     for fold in range(FOLD_NUM):
+        print("Fold %d, training ..."%(fold+1))
         result_fold_log = result_dir+"/fold_"+str(fold+1)+"_log.csv"
         if os.path.isfile(result_fold_log):
             continue
         conf.ckp_file= result_dir + '/fold_'+str(fold+1)+'.ckpt'
         dataset = OCR(DAT_DIR,fold)
         model = LSTM_SCRBM(conf,dataset)
-        vld_acc,vld_nllh,vld_f1,tst_acc,tst_nllh,tst_f1 = model.run()    
-        acc.append([vld_acc,vld_nllh,vld_f1,tst_acc,tst_nllh,tst_f1])
-        print("[Fold %d - VLD] : acc:%.5f nllh:%.5f f1:%.5f" %(fold+1,vld_acc,vld_nllh,vld_f1))       
-        np.savetxt(result_fold_log,[vld_acc,vld_nllh,vld_f1,tst_acc,tst_nllh,tst_f1],delimiter=',')
-        #return
-    acc = np.array(acc)
-    acc = np.append(acc,[np.mean(acc,axis=0)],axis=0)
+        vld_acc,vld_nllh,vld_f1,tst_acc,tst_nllh,tst_f1,_ = model.run()    
+        acc.append([vld_acc,tst_acc])
+        print("[Fold %d] : valid acc:%.5f test acc:%.5f" %(fold+1,vld_acc,tst_acc))       
+
+    acc = np.mean(np.array(acc),axis=0)
+    print("validation acc: %.5f  test acc: %.5f" % (acc[0],acc[1]))
     #Save to CSV File
     print("Saving results ...")
     np.savetxt(result_log,acc,delimiter=',')
