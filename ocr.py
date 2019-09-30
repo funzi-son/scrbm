@@ -1,5 +1,5 @@
 """
-Pos data reading - python3
+OCR data reading - python3
 Son N. Tran
 sontn.fz@gmail.com
 """
